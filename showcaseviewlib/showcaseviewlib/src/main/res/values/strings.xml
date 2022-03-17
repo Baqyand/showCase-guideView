@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ShowCaseViewLib</string>
+    <string name="dont_show_again">Jangan diperlihatkan lagi</string>
+    <string name="skip">Skip</string>
+    <string name="lanjut">Lanjut</string>
+    <string name="mulai_tur">Mulai Tur</string>
+    <string name="selesai">Selesai</string>
+</resources>
