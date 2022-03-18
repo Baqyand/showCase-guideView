@@ -5,4 +5,5 @@
     <string name="lanjut">Lanjut</string>
     <string name="mulai_tur">Mulai Tur</string>
     <string name="selesai">Selesai</string>
+    <string name="go_to">lanjut ke -> </string>
 </resources>

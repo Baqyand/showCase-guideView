@@ -6,6 +6,8 @@ public class GuideModel {
     View view;
     String title;
     String message;
+    String linkText;
+    Class<?> linkClass;
 
 
     public GuideModel() {
@@ -15,6 +17,20 @@ public class GuideModel {
         this.view = view;
         this.title = title;
         this.message = message;
+    }
+
+    public GuideModel(View view, String title, String message, String linkText) {
+        this.view = view;
+        this.title = title;
+        this.message = message;
+        this.linkText = linkText;
+    }
+
+    public GuideModel(View view, String title, String message, Class<?> linkClass) {
+        this.view = view;
+        this.title = title;
+        this.message = message;
+        this.linkClass = linkClass;
     }
 
     public View getView() {
@@ -39,5 +55,21 @@ public class GuideModel {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Class<?> getLinkClass() {
+        return linkClass;
+    }
+
+    public void setLinkClass(Class<?> linkClass) {
+        this.linkClass = linkClass;
+    }
+
+    public String getLinkText() {
+        return linkText;
+    }
+
+    public void setLinkText(String linkText) {
+        this.linkText = linkText;
     }
 }

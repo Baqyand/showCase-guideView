@@ -643,6 +643,16 @@ public class GuideView extends RelativeLayout {
         backGroundWhite.setContentText(str);
     }
 
+    public void setLinkToActivity(String link){
+        mMessageView.setLinkText(link);
+        backGroundWhite.setLinkText(link);
+    }
+
+    public void setLinkToActivityIntent(Class<?> linkClass){
+        mMessageView.setLinkToActivity(linkClass);
+        backGroundWhite.setLinkToActivity(linkClass);
+    }
+
     public void setContentSpan(Spannable span) {
         mMessageView.setContentSpan(span);
         backGroundWhite.setContentSpan(span);
@@ -693,6 +703,8 @@ public class GuideView extends RelativeLayout {
         private float circleIndicatorSize;
         private float circleInnerIndicatorSize;
         private float strokeCircleWidth;
+        private String linkText;
+        private Class<?> linkClass;
 
         public Builder(Context context) {
             this.context = context;
@@ -745,6 +757,16 @@ public class GuideView extends RelativeLayout {
          **/
         public Builder setContentText(String contentText) {
             this.contentText = contentText;
+            return this;
+        }
+
+        public Builder setLinkText(String linkText){
+            this.linkText = linkText;
+            return this;
+        }
+
+        public Builder setLinkClass(Class<?> linkClass){
+            this.linkClass = linkClass;
             return this;
         }
 
@@ -923,6 +945,14 @@ public class GuideView extends RelativeLayout {
             }
             if (strokeCircleWidth != 0) {
                 guideView.strokeCircleWidth = strokeCircleWidth * density;
+            }
+
+            if (linkText != null){
+                guideView.setLinkToActivity(linkText);
+            }
+
+            if (linkClass != null){
+                guideView.setLinkToActivityIntent(linkClass);
             }
 
             if (backGroundColor != 0) {

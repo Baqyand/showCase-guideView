@@ -34,7 +34,6 @@ public class ShowGuideView {
                         .setContentText(guideModelList.get(0).getMessage())
                         .setGravity(Gravity.center)
                         .setBackGroundColor(color)
-//                    .setDismissType(DismissType.anywhere)
                         .setPointerType(PointerType.none)
                         .setTargetView(guideModelList.get(0).getView())
                         .setLastIndex(guideModelList.size())
@@ -44,7 +43,7 @@ public class ShowGuideView {
                             public void onDismiss(View view, int index) {
                                 index = index + 1;
                                 if (index < guideModelList.size()) {
-                                    setTitleMessageGuide(guideModelList.get(index).getTitle(), guideModelList.get(index).getMessage(), guideModelList.get(index).getView(), index);
+                                    setTitleMessageGuide(guideModelList.get(index).getTitle(), guideModelList.get(index).getMessage(), guideModelList.get(index).getView(), guideModelList.get(index).getLinkClass(), guideModelList.get(index).getLinkText(), index);
                                 } else {
                                     return;
                                 }
@@ -60,10 +59,18 @@ public class ShowGuideView {
         }, 500);
     }
 
-    private void setTitleMessageGuide(String title, String message, View view, int index) {
+    private void setTitleMessageGuide(String title, String message, View view, Class<?> linkClass, String linkText, int index) {
+
+        builder.setLinkClass(linkClass);
+
+
+        builder.setLinkText(linkText);
+
+
         builder.setTitle(title)
                 .setContentText(message)
                 .setTargetView(view).build(index, isAllowToShowCheckBox);
+
     }
 
 }

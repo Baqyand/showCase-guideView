@@ -1,12 +1,17 @@
 package com.nexsoft.showcaseviewlib;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.text.Html;
 import android.text.Spannable;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -14,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class BackGroundWhite extends LinearLayout {
+
 
     private static final int RADIUS_SIZE = 5;
     private static final int PADDING_SIZE = 10;
@@ -27,11 +33,14 @@ public class BackGroundWhite extends LinearLayout {
     private final TextView mTitleTextView;
     private final TextView mContentTextView;
     private final TextView mLinkToActivity;
-
+    private Class<?> linkToActivity;
+    private Context context;
     int[] location = new int[2];
 
     BackGroundWhite(Context context) {
         super(context);
+
+        this.context = context;
 
         float density = context.getResources().getDisplayMetrics().density;
         setWillNotDraw(false);
@@ -71,18 +80,22 @@ public class BackGroundWhite extends LinearLayout {
         );
 
         mLinkToActivity = new TextView(context);
-        mLinkToActivity.setTextColor(Color.WHITE);
+        mLinkToActivity.setTextColor(Color.TRANSPARENT);
         mLinkToActivity.setTextSize(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_CONTENT_TEXT_SIZE);
         mLinkToActivity.setPadding(padding, paddingBottom, padding, padding);
         mLinkToActivity.setGravity(Gravity.LEFT);
-
+        mLinkToActivity.setClickable(true);
+        mLinkToActivity.setFocusable(true);
+        mLinkToActivity.setLinksClickable(true);
+        mLinkToActivity.setLinkTextColor(Color.BLACK);
         addView(
-                mContentTextView,
+                mLinkToActivity,
                 new LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                 )
         );
+
     }
 
     public void setTitle(String title) {
@@ -97,15 +110,31 @@ public class BackGroundWhite extends LinearLayout {
         mContentTextView.setText(content);
     }
 
-    public void setLinkText(String linkText){
+    public void setLinkText(String linkText) {
 
-        if(linkText == null){
+        if (linkText == null) {
+            removeView(mLinkToActivity);
+            return;
+        }
+        Spanned spanned = Html.fromHtml(linkText);
+
+        mLinkToActivity.setText(spanned);
+
+    }
+
+    public void setLinkToActivity(Class<?> linkToActivity) {
+        if (linkToActivity == null) {
             removeView(mLinkToActivity);
             return;
         }
 
-        mLinkToActivity.setText(linkText);
+        this.linkToActivity = linkToActivity;
+
+        mLinkToActivity.setText(getContext().getString(R.string.go_to) + linkToActivity.getName());
+        mLinkToActivity.setOnClickListener(view -> ActivityHelper.showActivity((Activity) context, linkToActivity, false));
+
     }
+
 
     public void setContentSpan(Spannable content) {
         mContentTextView.setText(content);
@@ -131,9 +160,10 @@ public class BackGroundWhite extends LinearLayout {
         mContentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
     }
 
-    public void setLinkTextSize(int size){
+    public void setLinkTextSize(int size) {
         mLinkToActivity.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
     }
+
 
     public void setColor(int color) {
         mPaint.setColor(color);
@@ -158,3 +188,4 @@ public class BackGroundWhite extends LinearLayout {
         canvas.drawRoundRect(mRect, radiusSize, radiusSize, mPaint);
     }
 }
+
