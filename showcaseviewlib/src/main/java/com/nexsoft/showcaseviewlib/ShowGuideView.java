@@ -13,6 +13,7 @@ import com.nexsoft.showcaseviewlib.storage.SessionGuide;
 import java.util.List;
 
 public class ShowGuideView {
+    private boolean isOnlyFirstTime;
     private GuideView mGuideView;
     private GuideView.Builder builder;
     private int color;
@@ -21,6 +22,12 @@ public class ShowGuideView {
     public ShowGuideView(int background, Boolean isAllowToShowCheckBox) {
         this.color = background;
         this.isAllowToShowCheckBox = isAllowToShowCheckBox;
+    }
+
+    public ShowGuideView(int background, Boolean isAllowToShowCheckBox,Boolean isOnlyFirstTime) {
+        this.color = background;
+        this.isAllowToShowCheckBox = isAllowToShowCheckBox;
+        this.isOnlyFirstTime = isOnlyFirstTime;
     }
 
 
@@ -38,19 +45,23 @@ public class ShowGuideView {
                         .setTargetView(guideModelList.get(0).getView())
                         .setLastIndex(guideModelList.size())
                         .setSessionKey(sessionKey)
-                        .setGuideListener(new GuideListener() {
-                            @Override
-                            public void onDismiss(View view, int index) {
-                                index = index + 1;
-                                if (index < guideModelList.size()) {
-                                    setTitleMessageGuide(guideModelList.get(index).getTitle(), guideModelList.get(index).getMessage(), guideModelList.get(index).getView(), guideModelList.get(index).getLinkClass(), guideModelList.get(index).getLinkText(), index);
-                                } else {
-                                    return;
-                                }
-
-                                mGuideView = builder.build(index, isAllowToShowCheckBox);
-                                mGuideView.show();
+                        .setOnlyFirstTime(isOnlyFirstTime)
+                        .setGuideListener((view, index) -> {
+                            index = index + 1;
+                            if (index < guideModelList.size()) {
+                                setTitleMessageGuide(guideModelList.get(index).getTitle()
+                                        , guideModelList.get(index).getMessage()
+                                        , guideModelList.get(index).getView()
+                                        , guideModelList.get(index).getLinkClass()
+                                        , guideModelList.get(index).getLinkText()
+                                        , guideModelList.get(index).isGotoNewClassWithButton()
+                                        , index);
+                            } else {
+                                return;
                             }
+
+                            mGuideView = builder.build(index, isAllowToShowCheckBox);
+                            mGuideView.show();
                         });
 
                 mGuideView = builder.build(0, isAllowToShowCheckBox);
@@ -59,13 +70,11 @@ public class ShowGuideView {
         }, 500);
     }
 
-    private void setTitleMessageGuide(String title, String message, View view, Class<?> linkClass, String linkText, int index) {
+    private void setTitleMessageGuide(String title, String message, View view, Class<?> linkClass, String linkText,boolean gotoNewClassWithButton, int index) {
 
         builder.setLinkClass(linkClass);
-
-
+        builder.setGoToNewClassWithButton(gotoNewClassWithButton);
         builder.setLinkText(linkText);
-
 
         builder.setTitle(title)
                 .setContentText(message)

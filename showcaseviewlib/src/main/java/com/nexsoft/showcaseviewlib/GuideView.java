@@ -94,7 +94,7 @@ public class GuideView extends RelativeLayout {
     BackGroundWhite backGroundWhite;
     RelativeLayout relativeLayout;
 
-    private GuideView(Context context, View view, int lastIndex, String sessionKey, int index, Boolean isAllowToShowCheckBox) {
+    private GuideView(Context context, View view, int lastIndex, String sessionKey, int index, Boolean isAllowToShowCheckBox, Boolean isOnlyFirstTime, boolean gotoNewClassWithButton, Class<?> linkClass) {
         super(context);
         SessionGuide.beginInitialization(context);
 
@@ -220,10 +220,13 @@ public class GuideView extends RelativeLayout {
                 dismiss(lastIndex);
 
             } else if (index == lastIndex - 1) {
-                SessionGuide.setSessionGlobalBoolean("onLogin", false);
+                SessionGuide.setSessionGlobalBoolean(sessionKey, Boolean.TRUE.equals(isOnlyFirstTime));
 
                 dismiss(index);
             } else {
+                if (gotoNewClassWithButton && linkClass != null) {
+                    ActivityHelper.showActivity((Activity) context, linkClass, false, sessionKey, sessionKey);
+                }
                 dismiss(index);
 
             }
@@ -242,7 +245,7 @@ public class GuideView extends RelativeLayout {
         lps.setMargins(10, 0, 10, 0);
 
         relativeButton.setLayoutParams(lps);
-        relativeButton.setPaddingRelative(0,10,0,10);
+        relativeButton.setPaddingRelative(0, 10, 0, 10);
 
         RelativeLayout relativeButtonTwo = new RelativeLayout(context);
         relativeButtonTwo.setLayoutParams(new ViewGroup.LayoutParams(
@@ -253,7 +256,7 @@ public class GuideView extends RelativeLayout {
         LayoutParams lpsBackground = (LayoutParams) generateDefaultLayoutParams();
         lpsBackground.setMargins(10, 0, 10, 0);
         relativeButtonTwo.setLayoutParams(lpsBackground);
-        relativeButtonTwo.setPaddingRelative(0,10,0,10);
+        relativeButtonTwo.setPaddingRelative(0, 10, 0, 10);
 
         // set param
         LayoutParams paramsCheckbox = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -643,14 +646,14 @@ public class GuideView extends RelativeLayout {
         backGroundWhite.setContentText(str);
     }
 
-    public void setLinkToActivity(String link){
+    public void setLinkToActivity(String link) {
         mMessageView.setLinkText(link);
         backGroundWhite.setLinkText(link);
     }
 
-    public void setLinkToActivityIntent(Class<?> linkClass){
-        mMessageView.setLinkToActivity(linkClass);
-        backGroundWhite.setLinkToActivity(linkClass);
+    public void setLinkToActivityIntent(Class<?> linkClass, boolean gotoNewClassWithButton) {
+        mMessageView.setLinkToActivity(linkClass, gotoNewClassWithButton);
+        backGroundWhite.setLinkToActivity(linkClass, gotoNewClassWithButton);
     }
 
     public void setContentSpan(Spannable span) {
@@ -705,6 +708,8 @@ public class GuideView extends RelativeLayout {
         private float strokeCircleWidth;
         private String linkText;
         private Class<?> linkClass;
+        private boolean isOnlyFirstTime;
+        private boolean gotoNewClassWithButton;
 
         public Builder(Context context) {
             this.context = context;
@@ -722,6 +727,11 @@ public class GuideView extends RelativeLayout {
 
         public Builder setSessionKey(String sessionKey) {
             this.sessionKey = sessionKey;
+            return this;
+        }
+
+        public Builder setOnlyFirstTime(boolean onlyFirstTime) {
+            this.isOnlyFirstTime = onlyFirstTime;
             return this;
         }
 
@@ -760,13 +770,18 @@ public class GuideView extends RelativeLayout {
             return this;
         }
 
-        public Builder setLinkText(String linkText){
+        public Builder setLinkText(String linkText) {
             this.linkText = linkText;
             return this;
         }
 
-        public Builder setLinkClass(Class<?> linkClass){
+        public Builder setLinkClass(Class<?> linkClass) {
             this.linkClass = linkClass;
+            return this;
+        }
+
+        public Builder setGoToNewClassWithButton(boolean gotoNewClassWithButton) {
+            this.gotoNewClassWithButton = gotoNewClassWithButton;
             return this;
         }
 
@@ -903,7 +918,9 @@ public class GuideView extends RelativeLayout {
         }
 
         public GuideView build(int index, boolean isAllowToShowCheckBox) {
-            GuideView guideView = new GuideView(context, targetView, lastIndex, sessionKey, index, isAllowToShowCheckBox);
+            GuideView guideView = new GuideView(context, targetView, lastIndex, sessionKey
+                    , index, isAllowToShowCheckBox
+                    , isOnlyFirstTime, gotoNewClassWithButton, linkClass);
             guideView.mGravity = gravity != null ? gravity : Gravity.auto;
             guideView.dismissType = dismissType != null ? dismissType : DismissType.targetView;
             guideView.pointerType = pointerType != null ? pointerType : PointerType.circle;
@@ -947,12 +964,12 @@ public class GuideView extends RelativeLayout {
                 guideView.strokeCircleWidth = strokeCircleWidth * density;
             }
 
-            if (linkText != null){
+            if (linkText != null) {
                 guideView.setLinkToActivity(linkText);
             }
 
-            if (linkClass != null){
-                guideView.setLinkToActivityIntent(linkClass);
+            if (linkClass != null) {
+                guideView.setLinkToActivityIntent(linkClass, gotoNewClassWithButton);
             }
 
             if (backGroundColor != 0) {

@@ -123,8 +123,8 @@ class GuideMessageView extends LinearLayout {
         mLinkToActivity.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    public void setLinkToActivity(Class<?> linkToActivity) {
-        if (linkToActivity == null){
+    public void setLinkToActivity(Class<?> linkToActivity, boolean gotoNewClassWithButton) {
+        if (linkToActivity == null || gotoNewClassWithButton){
             removeView(mLinkToActivity);
             return;
         }

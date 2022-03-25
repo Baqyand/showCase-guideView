@@ -8,6 +8,7 @@ public class GuideModel {
     String message;
     String linkText;
     Class<?> linkClass;
+    boolean gotoNewClassWithButton;
 
 
     public GuideModel() {
@@ -30,6 +31,14 @@ public class GuideModel {
         this.view = view;
         this.title = title;
         this.message = message;
+        this.linkClass = linkClass;
+    }
+
+    public GuideModel(View view, String title, String message, Class<?> linkClass, boolean gotoNewClassWithButton) {
+        this.view = view;
+        this.title = title;
+        this.message = message;
+        this.gotoNewClassWithButton = true;
         this.linkClass = linkClass;
     }
 
@@ -71,5 +80,13 @@ public class GuideModel {
 
     public void setLinkText(String linkText) {
         this.linkText = linkText;
+    }
+
+    public boolean isGotoNewClassWithButton() {
+        return gotoNewClassWithButton;
+    }
+
+    public void setGotoNewClassWithButton(boolean gotoNewClassWithButton) {
+        this.gotoNewClassWithButton = gotoNewClassWithButton;
     }
 }

@@ -122,8 +122,8 @@ public class BackGroundWhite extends LinearLayout {
 
     }
 
-    public void setLinkToActivity(Class<?> linkToActivity) {
-        if (linkToActivity == null) {
+    public void setLinkToActivity(Class<?> linkToActivity, boolean gotoNewClassWithButton) {
+        if (linkToActivity == null || gotoNewClassWithButton) {
             removeView(mLinkToActivity);
             return;
         }

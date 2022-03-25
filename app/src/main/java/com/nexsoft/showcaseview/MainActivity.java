@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         List<GuideModel> list = new ArrayList<>();
         list.add(new GuideModel(view1, "ini title view 1", "ini message view 1"));
-        list.add(new GuideModel(view2, "ini title view 2", "ini message view 2", WelcomeActivity.class));
+        list.add(new GuideModel(view2, "ini title view 2", "ini message view 2", WelcomeActivity.class,true));
         list.add(new GuideModel(view3, "ini title view 3", "ini message view 3"));
         list.add(new GuideModel(view4, "ini title view 4", "ini message view 4", getString(R.string.link_facebook)));
         list.add(new GuideModel(view5, "ini title view 5", "ini message view 5", LinkActivity.class));
